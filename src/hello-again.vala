@@ -16,6 +16,8 @@
 * with Hello Again. If not, see http://www.gnu.org/licenses/.
 */
 
+using Hello.Objects;
+
 namespace Hello {
 
 	public class HelloApp : Gtk.Application {
@@ -28,6 +30,8 @@ namespace Hello {
 
 		public Gtk.Popover popover;
 		public Gtk.Grid grid_p;
+
+		public Event e;
 
 		protected override void activate () {
 
@@ -65,13 +69,15 @@ namespace Hello {
 
 			button = new Gtk.Button.with_label ("Click me!");
 			button.clicked.connect (() => {
-					status.label = "Hello World!";
+					status.label = e.createddatetime.to_string ();
 				});
 
 			grid = new Gtk.Grid ();
 
 			grid.column_spacing = 12;
 			grid.row_spacing = 12;
+
+			e = new Event (new DateTime.now_local ());
 
 			grid.attach (button, 0, 0, 1, 1);
 			grid.attach (status, 0, 1, 1, 1);

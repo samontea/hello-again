@@ -39,6 +39,7 @@ ensure_vala_version("0.16" MINIMUM)
 include(ValaPrecompile)
 vala_precompile(VALA_C ${EXEC_NAME}
     src/hello-again.vala
+    src/objects/event.vala
 
 # tell what libraries to use when compiling
 PACKAGES
