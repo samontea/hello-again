@@ -24,6 +24,7 @@ namespace Hello {
 		public Gtk.Grid grid;
 		public Gtk.ToolButton h_b;
 		public Gtk.Button button;
+		public Gtk.Label status;
 
 		public Gtk.Popover popover;
 		public Gtk.Grid grid_p;
@@ -60,22 +61,24 @@ namespace Hello {
 
 			mainwindow.set_titlebar (tb);
 
+			status = new Gtk.Label ("Good bye!");
+
 			button = new Gtk.Button.with_label ("Click me!");
 			button.clicked.connect (() => {
-					button.label = "Hello World!";
-					button.set_sensitive (false);
+					status.label = "Hello World!";
 				});
 
 			grid = new Gtk.Grid ();
 
-			grid.column_spacing = 6;
-			grid.row_spacing = 6;
+			grid.column_spacing = 12;
+			grid.row_spacing = 12;
 
-			grid.attach(button, 0, 0, 1, 1);
+			grid.attach (button, 0, 0, 1, 1);
+			grid.attach (status, 0, 1, 1, 1);
 
-			mainwindow.add(grid);
+			mainwindow.add (grid);
 
-			mainwindow.show_all();
+			mainwindow.show_all ();
 		}
 
 		private void create_h_b_popover () {
