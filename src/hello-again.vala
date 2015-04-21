@@ -28,7 +28,7 @@ namespace Hello {
 		public Gtk.ToolButton add;
 		public Gtk.Calendar calendar;
 
-		public Event e;
+		public List<Event> events;
 
 		protected override void activate () {
 
@@ -79,7 +79,7 @@ namespace Hello {
 		}
 
 		private void create_add_popover () {
-			var label = new Gtk.Label.with_mnemonic ("Add a new event:");
+			var label = new Gtk.Label ("Add a new event:");
 			var calendar = new Gtk.Calendar ();
 			var add_button = new Gtk.Button.with_label ("Add");
 
@@ -90,6 +90,12 @@ namespace Hello {
 			grid_add.attach (label, 0, 0, 1, 1);
 			grid_add.attach (calendar, 0, 1, 1, 1);
 			grid_add.attach (add_button, 0, 2, 1, 1);
+
+			add_button.clicked.connect (() => {
+					var d = new DateTime.local(calendar.get_year (), calendar.get_month (),
+											   calendar.get_day, 0, 0, 0.0);
+					events.append (new Event (d));
+				});
 
 			var popover_add = new Gtk.Popover (add);
 			popover_add.add (grid_add);
