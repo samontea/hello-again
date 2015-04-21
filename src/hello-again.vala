@@ -103,14 +103,20 @@ namespace Hello {
 			grid_add.attach (calendar, 0, 1, 1, 1);
 			grid_add.attach (add_button, 0, 2, 1, 1);
 
+			var popover_add = new Gtk.Popover (add);
+			popover_add.add (grid_add);
+
 			add_button.clicked.connect (() => {
 					var d = new DateTime.local(calendar.year, calendar.month,
 											   calendar.day, 0, 0, 0.0);
 					events.append (new Event (d));
+					popover_add.hide ();
 				});
 
-			var popover_add = new Gtk.Popover (add);
-			popover_add.add (grid_add);
+			popover_add.hide.connect (() => {
+					popover_add.destroy ();
+				});
+
 			popover_add.show_all ();
 		}
 
