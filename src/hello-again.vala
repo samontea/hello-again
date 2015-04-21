@@ -64,8 +64,6 @@ namespace Hello {
 			grid.column_spacing = 12;
 			grid.row_spacing = 12;
 
-			e = new Event (new DateTime.now_local ());
-
 			mainwindow.add (grid);
 
 			mainwindow.show_all ();
@@ -73,7 +71,21 @@ namespace Hello {
 
 		private void create_h_b_popover () {
 			var popover = new Gtk.Popover (h_b);
+			var grid_h_b = new Gtk.Grid ();
 
+			grid_h_b.margin = 6;
+			grid_h_b.row_spacing = 6;
+			grid_h_b.column_spacing = 12;
+
+			int i = 0;
+
+			events.foreach ((entry) => {
+					var label = new Gtk.Label (entry.enddatetime.to_string ());
+					grid_h_b.attach (label, 0, i, 1, 1);
+					i++;
+				});
+
+			popover.add (grid_h_b);
 
 			popover.show_all ();
 		}
@@ -92,8 +104,8 @@ namespace Hello {
 			grid_add.attach (add_button, 0, 2, 1, 1);
 
 			add_button.clicked.connect (() => {
-					var d = new DateTime.local(calendar.get_year (), calendar.get_month (),
-											   calendar.get_day, 0, 0, 0.0);
+					var d = new DateTime.local(calendar.year, calendar.month,
+											   calendar.day, 0, 0, 0.0);
 					events.append (new Event (d));
 				});
 
