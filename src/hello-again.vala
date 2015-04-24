@@ -77,11 +77,24 @@ namespace Hello {
 			grid_h_b.row_spacing = 6;
 			grid_h_b.column_spacing = 12;
 
-			int i = 0;
+			var t_label1 = new Gtk.Label("Created date: ");
+			var t_label2 = new Gtk.Label("End date: ");
+			var t_label3 = new Gtk.Label("Time to elapse (days): ");
+
+			grid_h_b.attach (t_label1, 0, 0, 1, 1);
+			grid_h_b.attach (t_label2, 1, 0, 1, 1);
+			grid_h_b.attach (t_label3, 2, 0, 1, 1);
+
+			int i = 1;
 
 			events.foreach ((entry) => {
-					var label = new Gtk.Label (entry.enddatetime.to_string ());
-					grid_h_b.attach (label, 0, i, 1, 1);
+					var label1 = new Gtk.Label (entry.createddatetime.to_string ());
+					var label2 = new Gtk.Label (entry.enddatetime.to_string ());
+					var label3 = new Gtk.Label ((string) ((entry.enddatetime.difference (entry.createddatetime) + GLib.TimeSpan.HOUR * 24) / GLib.TimeSpan.DAY).to_string ());
+
+					grid_h_b.attach (label1, 0, i, 1, 1);
+					grid_h_b.attach (label2, 1, i, 1, 1);
+					grid_h_b.attach (label3, 2, i, 1, 1);
 					i++;
 				});
 
@@ -107,7 +120,7 @@ namespace Hello {
 			popover_add.add (grid_add);
 
 			add_button.clicked.connect (() => {
-					var d = new DateTime.local(calendar.year, calendar.month,
+					var d = new DateTime.local(calendar.year, calendar.month + 1,
 											   calendar.day, 0, 0, 0.0);
 					events.append (new Event (d));
 					popover_add.hide ();
