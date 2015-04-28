@@ -79,22 +79,30 @@ namespace Hello {
 
 			var t_label1 = new Gtk.Label("Created date: ");
 			var t_label2 = new Gtk.Label("End date: ");
-			var t_label3 = new Gtk.Label("Time to elapse (days): ");
+			var t_label3 = new Gtk.Label("Total time (days): ");
+			var t_label4 = new Gtk.Label("Time elapsed (days): ");
+			var t_label5 = new Gtk.Label("Percent elapsed: ");
 
 			grid_h_b.attach (t_label1, 0, 0, 1, 1);
 			grid_h_b.attach (t_label2, 1, 0, 1, 1);
 			grid_h_b.attach (t_label3, 2, 0, 1, 1);
+			grid_h_b.attach (t_label4, 3, 0, 1, 1);
+			grid_h_b.attach (t_label5, 4, 0, 1, 1);
 
 			int i = 1;
 
 			events.foreach ((entry) => {
 					var label1 = new Gtk.Label (entry.createddatetime.to_string ());
 					var label2 = new Gtk.Label (entry.enddatetime.to_string ());
-					var label3 = new Gtk.Label ((string) ((entry.enddatetime.difference (entry.createddatetime) + GLib.TimeSpan.HOUR * 24) / GLib.TimeSpan.DAY).to_string ());
+					var label3 = new Gtk.Label (((entry.enddatetime.difference (entry.createddatetime) + GLib.TimeSpan.HOUR * 24) / GLib.TimeSpan.DAY).to_string ());
+					var label4 = new Gtk.Label (((new DateTime.now_local ()).difference (entry.createddatetime)  / GLib.TimeSpan.DAY).to_string ());
+					var label5 = new Gtk.Label ((((double) (new DateTime.now_local ()).difference (entry.createddatetime) / (entry.createddatetime.difference (entry.createddatetime))).to_string ()));
 
 					grid_h_b.attach (label1, 0, i, 1, 1);
 					grid_h_b.attach (label2, 1, i, 1, 1);
 					grid_h_b.attach (label3, 2, i, 1, 1);
+					grid_h_b.attach (label4, 3, i, 1, 1);
+					grid_h_b.attach (label5, 4, i, 1, 1);
 					i++;
 				});
 
