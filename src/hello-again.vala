@@ -95,8 +95,13 @@ namespace Hello {
 					var label1 = new Gtk.Label (entry.createddatetime.to_string ());
 					var label2 = new Gtk.Label (entry.enddatetime.to_string ());
 					var label3 = new Gtk.Label (((entry.enddatetime.difference (entry.createddatetime) + GLib.TimeSpan.HOUR * 24) / GLib.TimeSpan.DAY).to_string ());
-					var label4 = new Gtk.Label (((new DateTime.now_local ()).difference (entry.createddatetime)  / GLib.TimeSpan.DAY).to_string ());
-					var label5 = new Gtk.Label ((((double) (new DateTime.now_local ()).difference (entry.createddatetime) / (entry.createddatetime.difference (entry.createddatetime))).to_string ()));
+					var current =  new DateTime.now_local ();
+					var label4 = new Gtk.Label ((current.difference (entry.createddatetime)  / GLib.TimeSpan.DAY).to_string ());
+					int64 elapsed_t = (int64) (current.difference (entry.createddatetime))  / GLib.TimeSpan.HOUR;
+					int64 total = (int64) (entry.enddatetime.difference (entry.createddatetime)) / GLib.TimeSpan.HOUR;
+
+					double percent = (double)  elapsed_t / total;
+					var label5 = new Gtk.Label (percent.to_string ());
 
 					grid_h_b.attach (label1, 0, i, 1, 1);
 					grid_h_b.attach (label2, 1, i, 1, 1);
