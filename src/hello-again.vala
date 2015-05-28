@@ -17,6 +17,7 @@
 */
 
 using Hello.Objects;
+//using Hello.Widgets;
 
 namespace Hello {
 
@@ -77,21 +78,25 @@ namespace Hello {
 			grid_h_b.row_spacing = 6;
 			grid_h_b.column_spacing = 12;
 
+
+			var t_label0 = new Gtk.Label("Name:");
 			var t_label1 = new Gtk.Label("Created date: ");
 			var t_label2 = new Gtk.Label("End date: ");
 			var t_label3 = new Gtk.Label("Total time (days): ");
 			var t_label4 = new Gtk.Label("Time elapsed (days): ");
 			var t_label5 = new Gtk.Label("Percent elapsed: ");
 
-			grid_h_b.attach (t_label1, 0, 0, 1, 1);
-			grid_h_b.attach (t_label2, 1, 0, 1, 1);
-			grid_h_b.attach (t_label3, 2, 0, 1, 1);
-			grid_h_b.attach (t_label4, 3, 0, 1, 1);
-			grid_h_b.attach (t_label5, 4, 0, 1, 1);
+			grid_h_b.attach (t_label0, 0, 0, 1, 1);
+			grid_h_b.attach (t_label1, 1, 0, 1, 1);
+			grid_h_b.attach (t_label2, 2, 0, 1, 1);
+			grid_h_b.attach (t_label3, 3, 0, 1, 1);
+			grid_h_b.attach (t_label4, 4, 0, 1, 1);
+			grid_h_b.attach (t_label5, 5, 0, 1, 1);
 
 			int i = 1;
 
 			events.foreach ((entry) => {
+					var label0 = new Gtk.Label (entry.name);
 					var label1 = new Gtk.Label (entry.createddatetime.to_string ());
 					var label2 = new Gtk.Label (entry.enddatetime.to_string ());
 					var label3 = new Gtk.Label (((entry.enddatetime.difference (entry.createddatetime) + GLib.TimeSpan.HOUR * 24) / GLib.TimeSpan.DAY).to_string ());
@@ -103,11 +108,12 @@ namespace Hello {
 					double percent = (double)  elapsed_t / total;
 					var label5 = new Gtk.Label (percent.to_string ());
 
-					grid_h_b.attach (label1, 0, i, 1, 1);
-					grid_h_b.attach (label2, 1, i, 1, 1);
-					grid_h_b.attach (label3, 2, i, 1, 1);
-					grid_h_b.attach (label4, 3, i, 1, 1);
-					grid_h_b.attach (label5, 4, i, 1, 1);
+					grid_h_b.attach (label0, 0, 1, 1, 1);
+					grid_h_b.attach (label1, 1, i, 1, 1);
+					grid_h_b.attach (label2, 2, i, 1, 1);
+					grid_h_b.attach (label3, 3, i, 1, 1);
+					grid_h_b.attach (label4, 4, i, 1, 1);
+					grid_h_b.attach (label5, 5, i, 1, 1);
 					i++;
 				});
 
@@ -118,6 +124,8 @@ namespace Hello {
 
 		private void create_add_popover () {
 			var label = new Gtk.Label ("Add a new event:");
+			var name = new Gtk.Entry ();
+			name.set_text("Name");
 			var calendar = new Gtk.Calendar ();
 			var add_button = new Gtk.Button.with_label ("Add");
 
@@ -126,8 +134,9 @@ namespace Hello {
 			grid_add.row_spacing = 6;
 			grid_add.column_spacing = 12;
 			grid_add.attach (label, 0, 0, 1, 1);
-			grid_add.attach (calendar, 0, 1, 1, 1);
-			grid_add.attach (add_button, 0, 2, 1, 1);
+			grid_add.attach (name, 0, 1, 1, 1);
+			grid_add.attach (calendar, 0, 2, 1, 1);
+			grid_add.attach (add_button, 0, 3, 1, 1);
 
 			var popover_add = new Gtk.Popover (add);
 			popover_add.add (grid_add);
@@ -135,7 +144,7 @@ namespace Hello {
 			add_button.clicked.connect (() => {
 					var d = new DateTime.local(calendar.year, calendar.month + 1,
 											   calendar.day, 0, 0, 0.0);
-					events.append (new Event (d));
+					events.append (new Event (name.get_text(), d));
 					popover_add.hide ();
 				});
 

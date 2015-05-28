@@ -22,8 +22,10 @@ namespace Hello.Objects {
 
 		public DateTime createddatetime;
 		public DateTime enddatetime;
+		public string name;
 
-		public Event (DateTime end) {
+		public Event (string text, DateTime end) {
+			name = text;
 			createddatetime = new DateTime.now_local ();
 			enddatetime = end;
 		}
