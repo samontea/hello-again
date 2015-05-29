@@ -108,7 +108,7 @@ namespace Hello {
 					double percent = (double)  elapsed_t / total;
 					var label5 = new Gtk.Label (percent.to_string ());
 
-					grid_h_b.attach (label0, 0, 1, 1, 1);
+					grid_h_b.attach (label0, 0, i, 1, 1);
 					grid_h_b.attach (label1, 1, i, 1, 1);
 					grid_h_b.attach (label2, 2, i, 1, 1);
 					grid_h_b.attach (label3, 3, i, 1, 1);
@@ -146,6 +146,7 @@ namespace Hello {
 											   calendar.day, 0, 0, 0.0);
 					events.append (new Event (name.get_text(), d));
 					popover_add.hide ();
+					update_events ();
 				});
 
 			popover_add.hide.connect (() => {
@@ -153,6 +154,50 @@ namespace Hello {
 				});
 
 			popover_add.show_all ();
+		}
+
+		private void update_events () {
+
+			var t_label0 = new Gtk.Label("Name:");
+			var t_label1 = new Gtk.Label("Created date: ");
+			var t_label2 = new Gtk.Label("End date: ");
+			var t_label3 = new Gtk.Label("Total time (days): ");
+			var t_label4 = new Gtk.Label("Time elapsed (days): ");
+			var t_label5 = new Gtk.Label("Percent elapsed: ");
+
+			grid.attach (t_label0, 0, 0, 1, 1);
+			grid.attach (t_label1, 1, 0, 1, 1);
+			grid.attach (t_label2, 2, 0, 1, 1);
+			grid.attach (t_label3, 3, 0, 1, 1);
+			grid.attach (t_label4, 4, 0, 1, 1);
+			grid.attach (t_label5, 5, 0, 1, 1);
+
+			var i = 1;
+
+			events.foreach ((entry) => {
+					var label0 = new Gtk.Label (entry.name);
+					var label1 = new Gtk.Label (entry.createddatetime.to_string ());
+					var label2 = new Gtk.Label (entry.enddatetime.to_string ());
+					var label3 = new Gtk.Label (((entry.enddatetime.difference (entry.createddatetime) + GLib.TimeSpan.HOUR * 24) / GLib.TimeSpan.DAY).to_string ());
+					var current =  new DateTime.now_local ();
+					var label4 = new Gtk.Label ((current.difference (entry.createddatetime)  / GLib.TimeSpan.DAY).to_string ());
+					int64 elapsed_t = (int64) (current.difference (entry.createddatetime))  / GLib.TimeSpan.HOUR;
+					int64 total = (int64) (entry.enddatetime.difference (entry.createddatetime)) / GLib.TimeSpan.HOUR;
+
+					double percent = (double)  elapsed_t / total;
+					var label5 = new Gtk.Label (percent.to_string ());
+
+					grid.attach (label0, 0, i, 1, 1);
+					grid.attach (label1, 1, i, 1, 1);
+					grid.attach (label2, 2, i, 1, 1);
+					grid.attach (label3, 3, i, 1, 1);
+					grid.attach (label4, 4, i, 1, 1);
+					grid.attach (label5, 5, i, 1, 1);
+					i++;
+				});
+
+			mainwindow.show_all ();
+
 		}
 
 	}
