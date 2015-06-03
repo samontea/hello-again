@@ -23,6 +23,7 @@ namespace Hello.Objects {
 		public DateTime createddatetime;
 		public DateTime enddatetime;
 		public string name;
+		public int id;
 
 		public Event (string text, DateTime end) {
 			name = text;

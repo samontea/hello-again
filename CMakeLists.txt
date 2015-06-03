@@ -40,10 +40,12 @@ include(ValaPrecompile)
 vala_precompile(VALA_C ${EXEC_NAME}
     src/hello-again.vala
     src/objects/event.vala
+#	src/widgets/analog-frame.vala
 
 # tell what libraries to use when compiling
 PACKAGES
     gtk+-3.0
+	sqlheavy-0.1
 )
 
 # tell cmake what to call the executable we just made
