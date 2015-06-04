@@ -11,15 +11,15 @@ namespace Hello.Data {
 		}
 
 		//fields
-		private SQLHeavy.Daatabase db;
+		private SQLHeavy.Database db;
 		GLib.File db_file;
 
 		//constructor
 		private DatabaseManager () {
 
-			database_location = Environment.get_user_data_dir () + "/hello-again";
+			var database_location = Environment.get_user_data_dir () + "/hello-again";
 
-			db_file = File.new_for_path (settings.database_location + "/events.db");
+			db_file = File.new_for_path (database_location + "/events.db");
 
 	        connect_database (!db_file.query_exists ());
 
@@ -32,7 +32,7 @@ namespace Hello.Data {
 				db = new SQLHeavy.Database (db_file.get_path (),
 											SQLHeavy.FileMode.READ | SQLHeavy.FileMode.WRITE | SQLHeavy.FileMode.CREATE);
 				if (need_create) {
-					db.execute ("CREATE VIRTUAL TABLE eventss USING fts3(name TEXT, createddatetime INT64, enddatetime INT64);");
+					db.execute ("CREATE VIRTUAL TABLE eventss USING fts3(name TEXT, createddatetime INT64, enddatetime INT64, id INTEGER PRIMARY KEY AUTOINCREMENT);");
 				}
 			} catch (SQLHeavy.Error e) {
 				critical ("Could not create db: %s", e.message);
@@ -46,7 +46,7 @@ namespace Hello.Data {
 				q.set_int64 (":createddatetime", evnt.createddatetime.to_unix ());
 				q.set_int64 (":enddatetime", evnt.enddatetime.to_unix ());
 				q.execute ();
-				e.id = (int)db.last_insert_id;
+				evnt.id = (int)db.last_insert_id;
 			} catch (SQLHeavy.Error e) {
 				critical (e.message);
 			}
@@ -64,7 +64,7 @@ namespace Hello.Data {
 			}
 		}
 
-		public void delete_event (Hello.Object.Event evnt) {
+		public void delete_event (Hello.Objects.Event evnt) {
 			try {
 				var q = db.prepare ("DELETE FROM 'events' WHERE rowid = :id;");
 				q.set_int (":id", evnt.id);
@@ -73,6 +73,48 @@ namespace Hello.Data {
 				critical (e.message);
 			}
 
+		}
+
+		public List<Hello.Objects.Event> get_events () {
+			var list = new List<Hello.Objects.Event> ();
+			try {
+				for (var res=db.execute ("SELECT name,createddatetime,enddatetime,id FROM 'events';"); !res.finished ; res.next ()) {
+
+					var evnt = new Hello.Objects.Event.from_existing (res.fetch_string(0), datetime_converter(res, 1), datetime_converter(res, 2), res.fetch_int(3));
+
+					list.append(evnt);
+
+				}
+
+			} catch (SQLHeavy.Error e) {
+				critical (e.message);
+			}
+			return list;
+		}
+
+		public DateTime datetime_converter (SQLHeavy.QueryResult res, int column_index) {
+			DateTime return_value = new DateTime.now_local ();
+
+			try {
+				if (res.field_type (column_index) == typeof(string)) {
+					var date_string = res.fetch_string (column_index);
+					var parts = date_string.split (" ", 3);
+					var hour_parts = parts[0].split (":", 2);
+					var day_parts = parts[2].split (".", 3);
+					var year = int.parse (day_parts[2]);
+					var month = int.parse (day_parts[1]);
+					var day = int.parse (day_parts[0]);
+					var hours = int.parse (hour_parts[0]);
+					var minutes = int.parse (hour_parts[1]);
+
+					return_value = new DateTime.local (year, month, day, hours, minutes, 0);
+				} else
+					return_value = new DateTime.from_unix_local (res.fetch_int64 (column_index));
+			} catch (SQLHeavy.Error e) {
+				critical (e.message);
+			}
+
+			return return_value;
 		}
 
 	}

@@ -68,6 +68,11 @@ namespace Hello {
 			mainwindow.add (grid);
 
 			mainwindow.show_all ();
+
+			var events_list = Hello.Data.DatabaseManager.get_default ().get_events ();
+			foreach (var evnt in events_list) {
+				add_event (evnt);
+			}
 		}
 
 		private void create_h_b_popover () {
@@ -198,6 +203,11 @@ namespace Hello {
 
 			mainwindow.show_all ();
 
+		}
+
+		private void add_event (Event evnt) {
+			events.append (evnt);
+			update_events();
 		}
 
 	}

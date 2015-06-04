@@ -18,11 +18,20 @@ set (RELEASE_NAME "A hello world.")
 set (VERSION "0.1")
 set (VERSION_INFO "whats up world")
 
+# Load Custom CMake Modules
+list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
 # we're about to use pkgconfig to make sure dependencies are installed so let's find pkgconfig first
 find_package(PkgConfig)
 
 # now let's actually check for the required dependencies
-pkg_check_modules(DEPS REQUIRED gtk+-3.0)
+pkg_check_modules(DEPS REQUIRED
+	gtk+-3.0
+	granite
+	sqlheavy-0.1
+)
+
+add_definitions(-w)
 
 add_definitions(${DEPS_CFLAGS})
 link_libraries(${DEPS_LIBRARIES})
@@ -40,10 +49,12 @@ include(ValaPrecompile)
 vala_precompile(VALA_C ${EXEC_NAME}
     src/hello-again.vala
     src/objects/event.vala
+    src/database/database.vala
 #	src/widgets/analog-frame.vala
 
 # tell what libraries to use when compiling
 PACKAGES
+	granite
     gtk+-3.0
 	sqlheavy-0.1
 )

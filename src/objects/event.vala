@@ -31,6 +31,13 @@ namespace Hello.Objects {
 			enddatetime = end;
 		}
 
+		public Event.from_existing (string name, DateTime createddatetime, DateTime enddatetime, int id) {
+			this.name = name;
+			this.createddatetime = createddatetime;
+			this.enddatetime = enddatetime;
+			this.id = id;
+		}
+
 	}
 
 }
