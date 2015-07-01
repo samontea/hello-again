@@ -19,6 +19,10 @@ namespace Hello.Data {
 
 			var database_location = Environment.get_user_data_dir () + "/hello-again";
 
+			//debug
+
+			stdout.printf(database_location + "\n");
+
 			db_file = File.new_for_path (database_location + "/events.db");
 
 	        connect_database (!db_file.query_exists ());
@@ -29,11 +33,15 @@ namespace Hello.Data {
 		private void connect_database (bool need_create) {
 
 			try {
+				//debug
+				stdout.printf("connecting database\n" + "needed creation:" + need_create.to_string () + "\n");
+
 				db = new SQLHeavy.Database (db_file.get_path (),
 											SQLHeavy.FileMode.READ | SQLHeavy.FileMode.WRITE | SQLHeavy.FileMode.CREATE);
 				if (need_create) {
-					db.execute ("CREATE VIRTUAL TABLE eventss USING fts3(name TEXT, createddatetime INT64, enddatetime INT64, id INTEGER PRIMARY KEY AUTOINCREMENT);");
+					db.execute ("CREATE TABLE events (name TEXT, createddatetime INT64, enddatetime INT64, id INTEGER PRIMARY KEY AUTOINCREMENT);");
 				}
+
 			} catch (SQLHeavy.Error e) {
 				critical ("Could not create db: %s", e.message);
 			}
@@ -41,6 +49,8 @@ namespace Hello.Data {
 
 		public void add_event (Hello.Objects.Event evnt) {
 			try {
+				//debug
+				stdout.printf("adding things\n");
 				var q = db.prepare("INSERT INTO 'events' ( name, createddatetime, enddatetime) VALUES  (:name, :createddatetime, :enddatetime);");
 				q.set_string (":name", evnt.name);
 				q.set_int64 (":createddatetime", evnt.createddatetime.to_unix ());
@@ -78,7 +88,8 @@ namespace Hello.Data {
 		public List<Hello.Objects.Event> get_events () {
 			var list = new List<Hello.Objects.Event> ();
 			try {
-				for (var res=db.execute ("SELECT name,createddatetime,enddatetime,id FROM 'events';"); !res.finished ; res.next ()) {
+
+				for (var res=db.execute ("SELECT name, createddatetime, enddatetime, id FROM 'events';"); !res.finished ; res.next ()) {
 
 					var evnt = new Hello.Objects.Event.from_existing (res.fetch_string(0), datetime_converter(res, 1), datetime_converter(res, 2), res.fetch_int(3));
 
@@ -87,7 +98,7 @@ namespace Hello.Data {
 				}
 
 			} catch (SQLHeavy.Error e) {
-				critical (e.message);
+				warning ("Could not query the events: %s", e.message);
 			}
 			return list;
 		}

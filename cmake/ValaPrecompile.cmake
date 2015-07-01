@@ -156,14 +156,12 @@ macro(vala_precompile output target_name)
 
     set(custom_vapi_arguments "")
     if(ARGS_CUSTOM_VAPIS)
-        # Check for relative and absolute paths
         foreach(vapi ${ARGS_CUSTOM_VAPIS})
-            string(REGEX MATCH "^/" IS_MATCHED ${vapi})
-            if(${IS_MATCHED} MATCHES "/")
+            if(${vapi} MATCHES ${CMAKE_SOURCE_DIR} OR ${vapi} MATCHES ${CMAKE_BINARY_DIR})
                 list(APPEND custom_vapi_arguments ${vapi})
-            else()
+            else (${vapi} MATCHES ${CMAKE_SOURCE_DIR} OR ${vapi} MATCHES ${CMAKE_BINARY_DIR})
                 list(APPEND custom_vapi_arguments ${CMAKE_CURRENT_SOURCE_DIR}/${vapi})
-            endif()
+            endif(${vapi} MATCHES ${CMAKE_SOURCE_DIR} OR ${vapi} MATCHES ${CMAKE_BINARY_DIR})
         endforeach(vapi ${ARGS_CUSTOM_VAPIS})
     endif(ARGS_CUSTOM_VAPIS)
 

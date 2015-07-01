@@ -29,6 +29,9 @@ namespace Hello.Objects {
 			name = text;
 			createddatetime = new DateTime.now_local ();
 			enddatetime = end;
+			//debug
+			stdout.printf("hello");
+			Hello.Data.DatabaseManager.get_default ().add_event(this);
 		}
 
 		public Event.from_existing (string name, DateTime createddatetime, DateTime enddatetime, int id) {
