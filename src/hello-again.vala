@@ -24,7 +24,7 @@ namespace Hello {
 	public class HelloApp : Gtk.Application {
 		public Gtk.ApplicationWindow mainwindow;
 
-		public Gtk.Grid grid;
+		public Gtk.FlowBox flow;
 		public Gtk.ToolButton h_b;
 		public Gtk.ToolButton add;
 		public Gtk.Calendar calendar;
@@ -60,12 +60,13 @@ namespace Hello {
 
 			mainwindow.set_titlebar (tb);
 
-			grid = new Gtk.Grid ();
+			flow = new Gtk.FlowBox ();
 
-			grid.column_spacing = 12;
-			grid.row_spacing = 12;
+			flow.set_column_spacing (12);
+			flow.set_row_spacing (12);
+			flow.set_homogeneous (true);
 
-			mainwindow.add (grid);
+			mainwindow.add (flow);
 
 			mainwindow.show_all ();
 
@@ -163,26 +164,43 @@ namespace Hello {
 
 		private void update_events () {
 
-			var t_label0 = new Gtk.Label("Name:");
-			var t_label1 = new Gtk.Label("Created date: ");
-			var t_label2 = new Gtk.Label("End date: ");
-			var t_label3 = new Gtk.Label("Total time (days): ");
-			var t_label4 = new Gtk.Label("Time elapsed (days): ");
-			var t_label5 = new Gtk.Label("Percent elapsed: ");
-
-			grid.attach (t_label0, 0, 0, 1, 1);
-			grid.attach (t_label1, 1, 0, 1, 1);
-			grid.attach (t_label2, 2, 0, 1, 1);
-			grid.attach (t_label3, 3, 0, 1, 1);
-			grid.attach (t_label4, 4, 0, 1, 1);
-			grid.attach (t_label5, 5, 0, 1, 1);
-
-			var i = 1;
+			var i = 0;
 
 			events.foreach ((entry) => {
-					var label0 = new Gtk.Label (entry.name);
-					var label1 = new Gtk.Label (entry.createddatetime.to_string ());
+					var event_child = new Gtk.FlowBoxChild();
+
+					var event_box = new Gtk.VBox(false, 5);
+
+					var label0 = new Gtk.Label (null);
+					label0.set_markup("<b>" + entry.name + "</b>");
+					//generating percentage
+					var current =  new DateTime.now_local ();
+					int64 elapsed_t = (int64) (current.difference (entry.createddatetime))  / GLib.TimeSpan.HOUR;
+					int64 total = (int64) (entry.enddatetime.difference (entry.createddatetime)) / GLib.TimeSpan.HOUR;
+					double percent = (double) elapsed_t / total;
+					percent *= 100;
+					var label1 = new Gtk.Label (null);
+					var percent_string = percent.to_string();
+					if (percent_string.length > 5) {
+						percent_string = percent_string.substring (0,4);
+					}
+					label1.set_markup("<b><big>" + percent_string + "%</big></b>");
+					//time1 to time2 line
+					var label2 = new Gtk.Label (null);
+					label2.set_markup("<small>" + entry.createddatetime.format("%h. %d, %Y") + " - " + entry.enddatetime.format("%h. %d, %Y") + "</small>");
+
+
+
+					event_box.add(label0);
+					event_box.add(label1);
+					event_box.add(label2);
+					event_child.add(event_box);
+					flow.insert(event_child, i);
+					event_child.show_all();
+
+/*					var label1 = new Gtk.Label (entry.createddatetime.to_string ());
 					var label2 = new Gtk.Label (entry.enddatetime.to_string ());
+				    //
 					var label3 = new Gtk.Label (((entry.enddatetime.difference (entry.createddatetime) + GLib.TimeSpan.HOUR * 24) / GLib.TimeSpan.DAY).to_string ());
 					var current =  new DateTime.now_local ();
 					var label4 = new Gtk.Label ((current.difference (entry.createddatetime)  / GLib.TimeSpan.DAY).to_string ());
@@ -197,7 +215,8 @@ namespace Hello {
 					grid.attach (label2, 2, i, 1, 1);
 					grid.attach (label3, 3, i, 1, 1);
 					grid.attach (label4, 4, i, 1, 1);
-					grid.attach (label5, 5, i, 1, 1);
+					grid.attach (label5, 5, i, 1, 1); */
+
 					i++;
 				});
 
