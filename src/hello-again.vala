@@ -179,6 +179,8 @@ namespace Hello {
 					int64 total = (int64) (entry.enddatetime.difference (entry.createddatetime)) / GLib.TimeSpan.HOUR;
 					double percent = (double) elapsed_t / total;
 					percent *= 100;
+					if (percent < 0 || percent > 100)
+						percent = 100;
 					var label1 = new Gtk.Label (null);
 					var percent_string = percent.to_string();
 					if (percent_string.length > 5) {
