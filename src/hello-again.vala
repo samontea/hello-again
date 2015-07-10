@@ -35,7 +35,7 @@ namespace Hello {
 
 			mainwindow = new Gtk.ApplicationWindow (this);
 			mainwindow.set_position (Gtk.WindowPosition.CENTER);
-			mainwindow.set_default_size (900, 800);
+			mainwindow.set_default_size (900, 650);
 			mainwindow.destroy.connect (Gtk.main_quit);
 
 			h_b = new Gtk.ToolButton (null, null);
@@ -163,6 +163,10 @@ namespace Hello {
 		}
 
 		private void update_events () {
+
+			flow.foreach ((child) => {
+					flow.remove(child);
+				});
 
 			var i = 0;
 
