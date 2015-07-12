@@ -24,6 +24,7 @@ namespace Hello {
 	public class HelloApp : Gtk.Application {
 		public Gtk.ApplicationWindow mainwindow;
 
+		public Gtk.ScrolledWindow scroll;
 		public Gtk.FlowBox flow;
 		public Gtk.ToolButton h_b;
 		public Gtk.ToolButton add;
@@ -60,13 +61,17 @@ namespace Hello {
 
 			mainwindow.set_titlebar (tb);
 
+			scroll = new Gtk.ScrolledWindow (new Gtk.Adjustment(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), new Gtk.Adjustment(0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+
 			flow = new Gtk.FlowBox ();
 
 			flow.set_column_spacing (12);
 			flow.set_row_spacing (12);
 			flow.set_homogeneous (true);
 
-			mainwindow.add (flow);
+			scroll.add(flow);
+
+			mainwindow.add (scroll);
 
 			mainwindow.show_all ();
 
