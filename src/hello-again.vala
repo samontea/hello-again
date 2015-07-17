@@ -56,8 +56,7 @@ namespace Hello {
 			tb.pack_start (h_b);
 			tb.show_close_button = true;
 
-			tb.set_title("Wink");
-			tb.set_subtitle("wink wink");
+			tb.set_title("hello-again");
 
 			mainwindow.set_titlebar (tb);
 
