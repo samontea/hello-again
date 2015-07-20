@@ -56,7 +56,7 @@ namespace Hello {
 			tb.pack_start (h_b);
 			tb.show_close_button = true;
 
-			tb.set_title("hello-again");
+			tb.set_title ("hello-again");
 
 			mainwindow.set_titlebar (tb);
 
@@ -89,12 +89,12 @@ namespace Hello {
 			grid_h_b.column_spacing = 12;
 
 
-			var t_label0 = new Gtk.Label("Name:");
-			var t_label1 = new Gtk.Label("Created date: ");
-			var t_label2 = new Gtk.Label("End date: ");
-			var t_label3 = new Gtk.Label("Total time (days): ");
-			var t_label4 = new Gtk.Label("Time elapsed (days): ");
-			var t_label5 = new Gtk.Label("Percent elapsed: ");
+			var t_label0 = new Gtk.Label ("Name:");
+			var t_label1 = new Gtk.Label ("Created date: ");
+			var t_label2 = new Gtk.Label ("End date: ");
+			var t_label3 = new Gtk.Label ("Total time (days): ");
+			var t_label4 = new Gtk.Label ("Time elapsed (days): ");
+			var t_label5 = new Gtk.Label ("Percent elapsed: ");
 
 			grid_h_b.attach (t_label0, 0, 0, 1, 1);
 			grid_h_b.attach (t_label1, 1, 0, 1, 1);
@@ -175,12 +175,12 @@ namespace Hello {
 			var i = 0;
 
 			events.foreach ((entry) => {
-					var event_child = new Gtk.FlowBoxChild();
+					var event_child = new Gtk.FlowBoxChild ();
 
-					var event_box = new Gtk.VBox(false, 5);
+					var event_box = new Gtk.VBox (false, 5);
 
 					var label0 = new Gtk.Label (null);
-					label0.set_markup("<b>" + entry.name + "</b>");
+					label0.set_markup ("<b>" + entry.name + "</b>");
 					//generating percentage
 					var current =  new DateTime.now_local ();
 					int64 elapsed_t = (int64) (current.difference (entry.createddatetime))  / GLib.TimeSpan.HOUR;
@@ -190,24 +190,24 @@ namespace Hello {
 					if (percent < 0 || percent > 100)
 						percent = 100;
 					var label1 = new Gtk.Label (null);
-					var percent_string = percent.to_string();
+					var percent_string = percent.to_string ();
 					if (percent_string.length > 5) {
 						percent_string = percent_string.substring (0,4);
 					}
-					label1.set_markup("<b><big>" + percent_string + "%</big></b>");
+					label1.set_markup ("<b><big>" + percent_string + "%</big></b>");
 					//time1 to time2 line
 					var label2 = new Gtk.Label (null);
-					label2.set_markup("<small>" + entry.createddatetime.format("%h. %d, %Y") + " - " + entry.enddatetime.format("%h. %d, %Y") + "</small>");
+					label2.set_markup ("<small>" + entry.createddatetime.format("%h. %d, %Y") + " - " + entry.enddatetime.format("%h. %d, %Y") + "</small>");
 					var progress = new Gtk.ProgressBar();
-					progress.set_fraction(percent / 100.0);
+					progress.set_fraction (percent / 100.0);
 
-					event_box.add(label0);
-					event_box.add(label1);
-					event_box.add(label2);
-					event_box.add(progress);
-					event_child.add(event_box);
-					flow.insert(event_child, i);
-					event_child.show_all();
+					event_box.add (label0);
+					event_box.add (label1);
+					event_box.add (progress);
+					event_box.add (label2);
+					event_child.add (event_box);
+					flow.insert (event_child, i);
+					event_child.show_all ();
 
 /*					var label1 = new Gtk.Label (entry.createddatetime.to_string ());
 					var label2 = new Gtk.Label (entry.enddatetime.to_string ());
@@ -237,7 +237,7 @@ namespace Hello {
 
 		private void add_event (Event evnt) {
 			events.append (evnt);
-			update_events();
+			update_events ();
 		}
 
 	}
