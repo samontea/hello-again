@@ -198,12 +198,13 @@ namespace Hello {
 					//time1 to time2 line
 					var label2 = new Gtk.Label (null);
 					label2.set_markup("<small>" + entry.createddatetime.format("%h. %d, %Y") + " - " + entry.enddatetime.format("%h. %d, %Y") + "</small>");
-
-
+					var progress = new Gtk.ProgressBar();
+					progress.set_fraction(percent / 100.0);
 
 					event_box.add(label0);
 					event_box.add(label1);
 					event_box.add(label2);
+					event_box.add(progress);
 					event_child.add(event_box);
 					flow.insert(event_child, i);
 					event_child.show_all();
